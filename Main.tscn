@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://nltehxyc1by5"]
+
+[ext_resource type="PackedScene" uid="uid://drw3w50ysoeru" path="res://UI.tscn" id="1_pikdy"]
+[ext_resource type="Script" path="res://ui.gd" id="2_f68se"]
+[ext_resource type="PackedScene" uid="uid://bvnyeat0e5afn" path="res://model/Ch36_nonPBR.fbx" id="3_ylkcu"]
+
+[sub_resource type="GDScript" id="GDScript_pif7r"]
+script/source = "extends Node3D
+
+
+func _ready():
+	var slider = TextEdit.new()
+
+func _button_pressed():
+	print(\"Hello world!\")
+"
+
+[sub_resource type="GDScript" id="GDScript_g4ar0"]
+script/source = "extends Node3D
+
+var skel
+var upper_id
+var lower_id
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	skel = get_node(\"Skeleton3D\")
+	upper_id = skel.find_bone(\"mixamorig1_Spine1\")
+	lower_id = skel.find_bone(\"mixamorig1_Spine\")
+	
+	set_process(true)
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	var upper = skel.get_bone_pose(upper_id)
+	upper = upper.rotated(Vector3(0, 0, 1), 0.1 * delta)
+	#kel.set_bone_pose(upper_id, upper)
+"
+
+[node name="Root" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.239172)
+script = SubResource("GDScript_pif7r")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08313, 2.00353)
+fov = 74.2878
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12049, 2.24028)
+
+[node name="UI" parent="." instance=ExtResource("1_pikdy")]
+script = ExtResource("2_f68se")
+
+[node name="Model" parent="UI" instance=ExtResource("3_ylkcu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00758111, 0, -0.267174)
+script = SubResource("GDScript_g4ar0")
